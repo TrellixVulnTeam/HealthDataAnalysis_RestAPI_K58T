@@ -29,24 +29,6 @@ def getPatientByID(_patientID):
 def getPatientByIDAndDate(_patientID,_date):
     return patientData.getPatientByIDAndDate(_patientID,_date)
 
-#
-#@app.route('/returnAccuracy', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
-#def returnAccuracy():
-#    return RF_iris_load.returnAccuracy()
-#
-#
-#@app.route('/predictRf', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
-#def predictRf():
-#    content = request.get_json()
-#    if(content == None):
-#        return 'No dataset available'
-#    else:
-#        import pandas as pd 
-#        df = pd.DataFrame.from_dict(content, orient='index')    
-#        return RF_iris_load.predictRf(np.asarray(df))
-#
-##    return RF_iris_load.predictRf([[5. , 3.4, 1.5, 0.2],[5. , 3.4, 1.5, 0.2],[5. , 3.4, 1.5, 0.2]])
-
 
 @app.route('/success/<name>')
 def success(name):
