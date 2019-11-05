@@ -31,3 +31,8 @@ def returnAccuracy():
 
 def predictRf(data):
     return str(list(rf.predict(data)))
+
+
+
+
+#{"0":{"sepal length (cm)":5.0,"sepal width (cm)":3.4,"petal length (cm)":1.5,"petal width (cm)":0.2},"1":{"sepal length (cm)":4.4,"sepal width (cm)":2.9,"petal length (cm)":1.4,"petal width (cm)":0.2},"2":{"sepal length (cm)":5.4,"sepal width (cm)":3.7,"petal length (cm)":1.5,"petal width (cm)":0.2},"3":{"sepal length (cm)":4.3,"sepal width (cm)":3.0,"petal length (cm)":1.1,"petal width (cm)":0.1},"4":{"sepal length (cm)":5.1,"sepal width (cm)":3.5,"petal length (cm)":1.4,"petal width (cm)":0.3}}
