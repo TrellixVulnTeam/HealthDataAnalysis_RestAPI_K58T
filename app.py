@@ -64,6 +64,17 @@ def predictDiabeticNextYearValue():
         df = pd.DataFrame.from_dict(content, orient='index')   
         return dp.predictDiabeticNextYearValue(df) #RF_iris_load.predictRf(np.asarray(df))
     
+      
+@app.route('/predictNextYearDiabeticClass', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predictNextYearDiabeticClass():
+    content = request.get_json()
+    if(content == None):
+        return 'No dataset available'
+    else:
+        import pandas as pd 
+        df = pd.DataFrame.from_dict(content, orient='index')   
+        return dp.predictNextYearDiabeticClass(df) #RF_iris_load.predictRf(np.asarray(df))
+    
     
     
 #=============app start=====================

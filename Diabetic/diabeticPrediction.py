@@ -46,6 +46,39 @@ def predictDiabeticClass(data):
     return RESULT#(data.to_json(orient='index'))
     
 
+def predictNextYearDiabeticClass(data):    
+            
+    # required columns 
+#    cols=['L104600','L103000','S000300','L101700','SEX','AGE',
+#          'L100700','FIELD_33','FIELD_38','FIELD_40','FIELD_31']
+    
+    # extract features from the payload data
+    data=data[['L104600','L103000','S000300','L101700','L100700','FIELD_33',
+               'FIELD_38','FIELD_40','FIELD_31','SEX','AGE']]
+    
+    # load the classifer model and the feature scaller  
+    with open('Diabetic/Models_NextYear/DiabeticClassifierModelForNextYear_rf_model_SMOTE', 'rb') as f:
+        _nextyearData_RF_Clf = pickle.load(f)
+        
+    with open('Diabetic/Models_NextYear/DiabeticClassifierModelForNextYear_scaler_SMOTE', 'rb') as f:
+        _nextyearData_scaler = pickle.load(f)
+        
+    scaledData= _nextyearData_scaler.transform(data)    
+    
+    # compute class probability
+    classprobapred= pd.DataFrame(_nextyearData_RF_Clf.predict_proba(scaledData), columns=['CLASS 0','CLASS 1','CLASS 2']).to_json(orient='index')
+    
+    # compute class value
+    classpred=pd.DataFrame(_nextyearData_RF_Clf.predict(scaledData),columns=['CLASS']).to_json(orient='index')
+    
+    RESULT = {
+      "Class value": json.loads(classpred),
+      "Class probability": json.loads(classprobapred) 
+    }
+    
+    return RESULT#(data.to_json(orient='index'))
+    
+
 def predictDiabeticNextYearValue(data):
     # in this section we predict the next year value of each features. 
 #    to predict next year values this year value and the features used to predict next year value should not be null    
