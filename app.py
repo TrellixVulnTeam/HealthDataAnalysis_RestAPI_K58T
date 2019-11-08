@@ -5,6 +5,7 @@ from flask import Flask, redirect, url_for, request
 import numpy as np
 import patientData  
 from Diabetic import diabeticPrediction as dp 
+from Hyperlipidemia import HyperlipidemiaPrediction as hp 
 
 app = Flask(__name__)
 
@@ -75,6 +76,20 @@ def predictNextYearDiabeticClass():
         df = pd.DataFrame.from_dict(content, orient='index')   
         return dp.predictNextYearDiabeticClass(df) #RF_iris_load.predictRf(np.asarray(df))
     
+    
+
+#======== Hyperlipidemia info API============
+#   ================================
+    
+@app.route('/predictHyperlipidemiaClass', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predictHyperlipidemiaClass():
+    content = request.get_json()
+    if(content == None):
+        return 'No dataset available'
+    else:
+        import pandas as pd 
+        df = pd.DataFrame.from_dict(content, orient='index')   
+        return hp.predictHyperlipidemiaClass(df) #RF_iris_load.predictRf(np.asarray(df))
     
     
 #=============app start=====================
