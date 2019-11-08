@@ -100,6 +100,16 @@ def predictHyperlipidemiaNextYearValue():
         import pandas as pd 
         df = pd.DataFrame.from_dict(content, orient='index')   
         return hp.predictHyperlipidemiaNextYearValue(df) #RF_iris_load.predictRf(np.asarray(df))
+      
+@app.route('/predictNextYearHyperlipidemiaClass', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predictNextYearHyperlipidemiaClass():
+    content = request.get_json()
+    if(content == None):
+        return 'No dataset available'
+    else:
+        import pandas as pd 
+        df = pd.DataFrame.from_dict(content, orient='index')   
+        return hp.predictNextYearHyperlipidemiaClass(df) #RF_iris_load.predictRf(np.asarray(df))
     
     
 #=============app start=====================

@@ -143,3 +143,34 @@ def predictHyperlipidemiaNextYearValue(data):
     return RESULT
     
 
+
+def predictNextYearHyperlipidemiaClass(data):    
+            
+    # required columns to predict class status of the patient
+    cols=['L100700','S000300','L101700','L100800','L103300','L103100','FIELD_33','FIELD_38','FIELD_40','SEX','AGE']
+    
+    # extract features from the payload data
+    data=data[cols]
+    
+    # load the classifer model and the feature scaller  
+    with open('Hyperlipidemia/Models_NextYear/HyperlipidemiaModelClassifierModelForNextYear_rf_model', 'rb') as f:
+        _nextyearData_RF_Clf = pickle.load(f)
+        
+    with open('Hyperlipidemia/Models_NextYear/HyperlipidemiaClassifierModelForNextYear_scaler_SMOTE', 'rb') as f:
+        _nextyearData_scaler = pickle.load(f)
+        
+    scaledData= _nextyearData_scaler.transform(data)    
+    
+    # compute class probability
+    classprobapred= pd.DataFrame(_nextyearData_RF_Clf.predict_proba(scaledData), columns=['CLASS 0','CLASS 1']).to_json(orient='index')
+    
+    # compute class value
+    classpred=pd.DataFrame(_nextyearData_RF_Clf.predict(scaledData),columns=['CLASS']).to_json(orient='index')
+    
+    RESULT = {
+      "Class value": json.loads(classpred),
+      "Class probability": json.loads(classprobapred) 
+    }
+    
+    return RESULT#(data.to_json(orient='index'))
+    
