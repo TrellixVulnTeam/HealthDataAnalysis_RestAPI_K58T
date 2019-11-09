@@ -129,6 +129,16 @@ def predictIschemiaClass():
         return ip.predictIschemiaClass(df) #RF_iris_load.predictRf(np.asarray(df))
     
     
+@app.route('/predictIschemiaNextYearValue', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predictIschemiaNextYearValue():
+    content = request.get_json()
+    if(content == None):
+        return 'No dataset available'
+    else:
+        import pandas as pd 
+        df = pd.DataFrame.from_dict(content, orient='index')   
+        return ip.predictIschemiaNextYearValue(df) #RF_iris_load.predictRf(np.asarray(df))
+      
 #=============app start=====================
 if __name__ == '__main__':
    app.run(debug=True)
