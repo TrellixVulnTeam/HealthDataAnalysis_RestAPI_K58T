@@ -41,9 +41,7 @@ def predictIschemiaClass(data):
       "Class probability": json.loads(classprobapred) 
     }
     
-    return RESULT#(data.to_json(orient='index'))
-
-
+    return RESULT#(data.to_json(orient='index'))  
 
 
 def predictIschemiaNextYearValue(data):
@@ -60,7 +58,7 @@ def predictIschemiaNextYearValue(data):
                 
     data=data[cols]
     
-#    'L100700','S000300','L101700','L103300','L103100','L190900','L504700','L190300','L103000','FIELD_15','FIELD_38','FIELD_33','SEX','AGE','CLASS'
+#    ,'CLASS'
     
                    
     #Load the trained regression models for the next year
@@ -132,4 +130,32 @@ def predictIschemiaNextYearValue(data):
         
     
     return RESULT #data.to_json(orient='index')
+    
+
+def predictIschemiaNextYearClass(data):
+            
+    # required columns to predict class status of the patient
+    cols=['L100700','S000300','L101700','L103300','L103100','L190900','L504700','L190300','L103000','FIELD_15','FIELD_38','FIELD_33','SEX','AGE']
+    
+    # extract features from the payload data
+    data=data[cols]
+    
+    # load the classifer model and the feature scaller  
+    with open('Ischemia/Models_NextYear/ISchemia_nextyear_RF_classifier', 'rb') as f:
+        _nextyearData_RF_Clf = pickle.load(f) 
+    
+    # compute class probability
+    classprobapred= pd.DataFrame(_nextyearData_RF_Clf.predict_proba(data), columns=['CLASS 0','CLASS 1']).to_json(orient='index')
+    
+    # compute class value
+    classpred=pd.DataFrame(_nextyearData_RF_Clf.predict(data),columns=['CLASS']).to_json(orient='index')
+    
+    RESULT = {
+      "Class value": json.loads(classpred),
+      "Class probability": json.loads(classprobapred) 
+    }
+    
+    return RESULT#(data.to_json(orient='index'))
+    
+    
     
