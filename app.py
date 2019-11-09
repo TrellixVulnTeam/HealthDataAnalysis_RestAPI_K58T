@@ -6,6 +6,7 @@ import numpy as np
 import patientData  
 from Diabetic import diabeticPrediction as dp 
 from Hyperlipidemia import HyperlipidemiaPrediction as hp 
+from Ischemia import Ischemia as ip 
 
 app = Flask(__name__)
 
@@ -110,6 +111,22 @@ def predictNextYearHyperlipidemiaClass():
         import pandas as pd 
         df = pd.DataFrame.from_dict(content, orient='index')   
         return hp.predictNextYearHyperlipidemiaClass(df) #RF_iris_load.predictRf(np.asarray(df))
+    
+    
+
+#======== Ischemia info API============
+#   ================================
+    
+
+@app.route('/predictIschemiaClass', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predictIschemiaClass():
+    content = request.get_json()
+    if(content == None):
+        return 'No dataset available'
+    else:
+        import pandas as pd 
+        df = pd.DataFrame.from_dict(content, orient='index')   
+        return ip.predictIschemiaClass(df) #RF_iris_load.predictRf(np.asarray(df))
     
     
 #=============app start=====================
