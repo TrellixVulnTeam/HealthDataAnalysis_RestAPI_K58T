@@ -43,9 +43,9 @@ def predictHyperlipidemiaClass(data):
         
         return RESULT#(data.to_json(orient='index')) 
     
-    except Exception as e:
-        return ((str(e))+(data.to_json(orient='index')))
-    
+    except Exception as e: 
+        return ((str(e))+ ' Required Fields: ' +', '.join(str(x) for x in cols)) 
+           
 
 
 
@@ -146,10 +146,11 @@ def predictHyperlipidemiaNextYearValue(data):
         return RESULT
     
     except Exception as e:
-        return ((str(e))+(data[np.unique(np.concatenate((cols_L100700,cols_S000300,cols_L101700,
-                cols_L100800,cols_L103300,cols_L103100)))].to_json(orient='index')))
-    
-    
+        return ((str(e))+ ' Required Fields: '+ ', '.join(str(x) for x in 
+                 np.unique(np.concatenate((cols_L100700,cols_S000300,cols_L101700,
+                cols_L100800,cols_L103300,cols_L103100)))                 
+                 ))
+                 
 
 
 def predictNextYearHyperlipidemiaClass(data):  
@@ -184,5 +185,5 @@ def predictNextYearHyperlipidemiaClass(data):
         return RESULT#(data.to_json(orient='index'))
         
     except Exception as e:
-        return ((str(e))+(data.to_json(orient='index')))
+        return ((str(e))+ ' Required Fields: '+ ', '.join(str(x) for x in cols)) 
     

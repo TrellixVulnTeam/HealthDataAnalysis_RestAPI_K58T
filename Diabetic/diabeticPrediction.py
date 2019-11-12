@@ -43,7 +43,7 @@ def predictDiabeticClass(data):
         
         return RESULT#(data.to_json(orient='index'))
     except Exception as e:
-        return ((str(e))+(data.to_json(orient='index')))
+        return ((str(e))+ ' Required Fields: '+ ', '.join(str(x) for x in cols))
     
 
 def predictNextYearDiabeticClass(data):    
@@ -81,7 +81,8 @@ def predictNextYearDiabeticClass(data):
         return RESULT#(data.to_json(orient='index'))
     
     except Exception as e:
-        return ((str(e))+(data.to_json(orient='index')))
+        return ((str(e))+ ' Required Fields: ' + ', '.join(str(x) for x in ['L104600','L103000','S000300','L101700','L100700','FIELD_33',
+                   'FIELD_38','FIELD_40','FIELD_31','SEX','AGE']))
     
 
 def predictDiabeticNextYearValue(data):
@@ -186,12 +187,12 @@ def predictDiabeticNextYearValue(data):
         return RESULT
     
     except Exception as e:
-        return ((str(e))+(data[['AGE', 'FIELD_31', 'FIELD_33', 'FIELD_38', 'FIELD_40', 'L100500',
+        return ((str(e))+ ' Required Fields: '+ ', '.join(str(x) for x in ['AGE', 'FIELD_31', 'FIELD_33', 'FIELD_38', 'FIELD_40', 'L100500',
        'L100700', 'L100800', 'L101200', 'L101300', 'L101600', 'L101700',
        'L103000', 'L103100', 'L103300', 'L104600', 'L107400', 'L190000',
        'L190300', 'L190400', 'S000100', 'S000300', 'S000501', 'S000502',
-       'SEX']].to_json(orient='index')))
+       'SEX'])                 
+            )
     
-
 
     

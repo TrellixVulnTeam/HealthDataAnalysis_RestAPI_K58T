@@ -43,7 +43,7 @@ def predictIschemiaClass(data):
         return RESULT#(data.to_json(orient='index'))  
          
     except Exception as e:
-        return ((str(e))+(data.to_json(orient='index')))
+        return ((str(e))+ ' Required Fields: '+ ', '.join(str(x) for x in cols)) 
     
 
 
@@ -135,12 +135,12 @@ def predictIschemiaNextYearValue(data):
         return RESULT #data.to_json(orient='index')
          
     except Exception as e:
-        return ((str(e))+(data[['AGE', 'FIELD_33', 'FIELD_38', 'FIELD_4', 'L100200', 'L100500',
+        return ((str(e))+ ' Required Fields: '+ ', '.join(str(x) for x in ['AGE', 'FIELD_33', 'FIELD_38', 'FIELD_4', 'L100200', 'L100500',
        'L100700', 'L100800', 'L101200', 'L101300', 'L101600', 'L101700',
        'L102900', 'L103000', 'L103100', 'L103200', 'L103300', 'L104300',
        'L104400', 'L104500', 'L190000', 'L190300', 'L190400', 'L190500',
        'L190600', 'L190700', 'L190800', 'L190900', 'L504700', 'S000100',
-       'S000300', 'S000501', 'S000502', 'SEX']].to_json(orient='index')))
+       'S000300', 'S000501', 'S000502', 'SEX'])) 
     
 
 def predictIschemiaNextYearClass(data):
@@ -171,7 +171,7 @@ def predictIschemiaNextYearClass(data):
         return RESULT#(data.to_json(orient='index'))
          
     except Exception as e:
-        return ((str(e))+(data.to_json(orient='index')))
+        return ((str(e))+ ' Required Fields: '+ ', '.join(str(x) for x in cols))  
     
     
     
