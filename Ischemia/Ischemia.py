@@ -51,8 +51,8 @@ def predictIschemiaNextYearValue(data):
     # in this section we predict the next year value of each features. 
 #    to predict next year values this year value and the features used to predict next year value should not be null    
     try:     
-        # required columns to predict class status of the patient
-        cols=['AGE','FIELD_1','FIELD_15','FIELD_2','FIELD_33','FIELD_38',
+        # required columns to predict class status of the patient 'FIELD_1','FIELD_2',
+        cols=['AGE','FIELD_15','FIELD_33','FIELD_38',
                 'FIELD_4','L100200','L100500','L100700','L100800','L101200','L101300',
                 'L101600','L101700','L102900','L103000','L103100','L103200','L103300',
                 'L104300','L104400','L104500','L190000','L190300','L190400','L190500',
