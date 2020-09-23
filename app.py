@@ -30,10 +30,17 @@ def success(name):
 #   ================================
 
 
+@app.route('/gethistplotData', methods=['GET', 'POST', 'PATCH',
+                                          'PUT', 'DELETE'])
+def gethistplotData():
+    return patientData.gethistplotData()
+
+
 @app.route('/getAllPatientData', methods=['GET', 'POST', 'PATCH',
                                           'PUT', 'DELETE'])
 def getAllPatientData():
     return patientData.getAllPatientData()
+
 
 
 @app.route('/getPatientByID/<_patientID>', methods=['GET', 'POST',
