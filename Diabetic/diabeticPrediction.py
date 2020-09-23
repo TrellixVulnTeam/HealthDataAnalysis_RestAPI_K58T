@@ -9,6 +9,7 @@ import pandas as pd
 import pickle
 import json
 
+
 def predictDiabeticClass(data):
     try:
         # required columns
@@ -58,7 +59,7 @@ def predictNextYearDiabeticClassDirect(data):
 
         # extract features from the payload data
         data = data[[
-            'L100800','L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
+            'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
             'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
         ]]
 
@@ -92,10 +93,9 @@ def predictNextYearDiabeticClassDirect(data):
         return ((str(e)) + ' Required Fields: ' + ', '.join(
             str(x)
             for x in [
-                'L100800','L104600', 'L103000', 'S000300', 'L101700', 'L100700',
+                'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700',
                 'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
             ]))
-
 
 
 def predictNextYearDiabeticClass(data):
@@ -146,8 +146,6 @@ def predictNextYearDiabeticClass(data):
             ]))
 
 
-
-
 def predictDiabeticNextYearValue(data):
     # in this section we predict the next year value of each features.
     # to predict next year values this year value and the features
@@ -158,6 +156,12 @@ def predictDiabeticNextYearValue(data):
         cols = [
             'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'SEX',
             'AGE', 'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31'
+        ]
+
+        #    features required to generate next year L104600 value
+        cols_L100800 = [
+            'L100800', 'S000300', 'L103000', 'L104600', 'AGE', 'L100700',
+            'L103100', 'L101700', 'L103300', 'L190500', 'L190400', 'L101300'
         ]
 
         #    features required to generate next year L104600 value
@@ -201,6 +205,10 @@ def predictDiabeticNextYearValue(data):
         ]
 
         # Load the trained regression models for the next year
+        with open('Diabetic/M_Ny/DiabeticModel_nextyear_L100800_RF_regressor',
+                  'rb') as f:
+            reg_L100800 = pickle.load(f)
+
         with open('Diabetic/M_Ny/DiabeticModel_nextyear_L104600_RF_regressor',
                   'rb') as f:
             reg_L104600 = pickle.load(f)
@@ -222,19 +230,21 @@ def predictDiabeticNextYearValue(data):
             reg_L100700 = pickle.load(f)
 
         # predicte next year value
+        N_y_L100800 = np.array(reg_L100800.predict(data[cols_L100800]))
         N_y_L104600 = np.array(reg_L104600.predict(data[cols_L104600]))
         N_y_L103000 = list(reg_L103000.predict(data[cols_L103000]))
         N_y_S000300 = list(reg_S000300.predict(data[cols_S000300]))
         N_y_L101700 = list(reg_L101700.predict(data[cols_L101700]))
         N_y_L100700 = list(reg_L100700.predict(data[cols_L100700]))
         N_y_SEX = list(data['SEX'])
-        N_y_AGE = list( ( data['AGE'].astype('int')) + 1)
+        N_y_AGE = list((data['AGE'].astype('int')) + 1)
         N_y_FIELD_33 = list(data['FIELD_33'])
         N_y_FIELD_38 = list(data['FIELD_38'])
         N_y_FIELD_40 = list(data['FIELD_40'])
         N_y_FIELD_31 = list(data['FIELD_31'])
 
         predictedNextYearValues = pd.DataFrame()
+        predictedNextYearValues['L100800'] = N_y_L100800
         predictedNextYearValues['L104600'] = N_y_L104600
         predictedNextYearValues['L103000'] = N_y_L103000
         predictedNextYearValues['S000300'] = N_y_S000300
@@ -248,18 +258,22 @@ def predictDiabeticNextYearValue(data):
         predictedNextYearValues['FIELD_31'] = N_y_FIELD_31
 
         predictedNextYearValues = predictedNextYearValues[[
-            'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
-            'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
+            'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700',
+            'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
         ]]
 
         # load the classifer model and the feature scaller
-        with open('Diabetic/M_Ny/DCMForNextYear_rf_model_SMOTE', 'rb') as f:
+        # with open('Diabetic/M_Ny/DCMForNextYear_rf_model_SMOTE', 'rb') as f:
+        #     _nextyearData_RF_Clf = pickle.load(f)
+
+        with open('Diabetic/M_Ny/NextYearDirectPredictUsingThisYearData', 'rb') as f:
             _nextyearData_RF_Clf = pickle.load(f)
 
-        with open('Diabetic/M_Ny/DCMForNextYear_scaler_SMOTE', 'rb') as f:
-            _nextyearData_scaler = pickle.load(f)
+        # with open('Diabetic/M_Ny/DCMForNextYear_scaler_SMOTE', 'rb') as f:
+        #     _nextyearData_scaler = pickle.load(f)
 
-        scaledData = _nextyearData_scaler.transform(predictedNextYearValues)
+        # scaledData = _nextyearData_scaler.transform(predictedNextYearValues)
+        scaledData = predictedNextYearValues
 
         # compute class probability
         classprobapred = pd.DataFrame(

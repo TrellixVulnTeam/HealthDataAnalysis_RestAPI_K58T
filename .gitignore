@@ -44,3 +44,9 @@ Diabetic/M_Ny/DCMForNextYear_rf_model_SMOTE
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/HealthDataAnalysis_RestAPI.iml
 .idea/misc.xml
+Ischemia/__pycache__/Ischemia.cpython-38.pyc
+Diabetic/__pycache__/diabeticPrediction.cpython-38.pyc
+Diabetic/M_Ny/NextYearDirectPredictUsingThisYearData
+Hyperlipidemia/__pycache__/HyperlipidemiaPrediction.cpython-38.pyc
+__pycache__/app.cpython-38.pyc
+__pycache__/patientData.cpython-38.pyc
