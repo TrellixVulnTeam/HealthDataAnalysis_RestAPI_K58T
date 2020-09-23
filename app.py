@@ -4,9 +4,11 @@ import patientData
 from Diabetic import diabeticPrediction as dp
 from Hyperlipidemia import HyperlipidemiaPrediction as hp
 from Ischemia import Ischemia as ip
+from flask_cors import CORS
 
 app = Flask(__name__)
 
+CORS(app)
 
 # ==== test route
 @app.route('/')
@@ -47,7 +49,7 @@ def getPatientByIDAndDate(_patientID, _date):
 
 
 # ======== DIABETIC info API============
-#   ================================
+#   ================================ 
 
 @app.route('/predictDiabetic',
            methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
@@ -84,6 +86,19 @@ def predictNextYearDiabeticClass():
         df = pd.DataFrame.from_dict(content, orient='index')
         # RF_iris_load.predictRf(np.asarray(df))
         return dp.predictNextYearDiabeticClass(df)
+    else:
+        return 'No dataset available'
+
+
+@app.route('/predictNextYearDiabeticClassDirect',
+           methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predictNextYearDiabeticClassDirect():
+    content = request.get_json()
+    if (content != None):
+        import pandas as pd
+        df = pd.DataFrame.from_dict(content, orient='index')
+        # RF_iris_load.predictRf(np.asarray(df))
+        return dp.predictNextYearDiabeticClassDirect(df)
     else:
         return 'No dataset available'
 
