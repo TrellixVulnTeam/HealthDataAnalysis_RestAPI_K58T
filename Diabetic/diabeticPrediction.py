@@ -228,7 +228,7 @@ def predictDiabeticNextYearValue(data):
         N_y_L101700 = list(reg_L101700.predict(data[cols_L101700]))
         N_y_L100700 = list(reg_L100700.predict(data[cols_L100700]))
         N_y_SEX = list(data['SEX'])
-        N_y_AGE = list(data['AGE'] + 1)
+        N_y_AGE = list( ( data['AGE'].astype('int')) + 1)
         N_y_FIELD_33 = list(data['FIELD_33'])
         N_y_FIELD_38 = list(data['FIELD_38'])
         N_y_FIELD_40 = list(data['FIELD_40'])
