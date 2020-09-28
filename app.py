@@ -36,6 +36,12 @@ def gethistplotData():
     return patientData.gethistplotData()
 
 
+@app.route('/getDiabetesTestData', methods=['GET', 'POST', 'PATCH',
+                                          'PUT', 'DELETE'])
+def getDiabetesTestData():
+    return patientData.getDiabetesTestData()
+
+
 @app.route('/getAllPatientData', methods=['GET', 'POST', 'PATCH',
                                           'PUT', 'DELETE'])
 def getAllPatientData():

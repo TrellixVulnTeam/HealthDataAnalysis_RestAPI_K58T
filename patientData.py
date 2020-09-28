@@ -7,6 +7,61 @@ data = pd.read_csv('sep19SexAndAgeAddedFINAL DATASET_ver2.txt').drop(
     columns=['Unnamed: 0'])
 
 
+
+# prepare the data for diabetes ui test 
+diabetesTestData=""
+
+def prepareDiabetesTestData ():
+
+    tempdata = data
+
+    conditions = [(tempdata.L100800 < 100), (tempdata.L100800 >= 100) & (
+        tempdata.L100800 < 126),        (tempdata.L100800 >= 126)]
+
+    choices = [0, 1, 2]
+
+    tempdata['CLASS'] = np.select(conditions, choices, default=0)
+
+    # filter the data set
+    # exclude people who are diagnosed for (diabetes)
+    tempdata = tempdata[tempdata.FIELD_16 != 1]
+    # exclude people who are on medication for diabetes
+    tempdata = tempdata[tempdata.FIELD_23 != 1]
+
+    # exclude people who are diagnosed for (high blood pressure)
+    tempdata = tempdata[tempdata.FIELD_15 != 1]
+    # exclude people who are on medication for high blood pressure
+    tempdata = tempdata[tempdata.FIELD_22 != 1]
+
+    # exclude people who are diagnosed for hyperlipidemia
+    tempdata = tempdata[tempdata.FIELD_17 != 1]
+    # exclude people who are on medication for hyperlipidemia
+    tempdata = tempdata[tempdata.FIELD_24 != 1]
+    print(tempdata.shape)
+
+    diabetes_requiredColumns = ['AGE', 'FIELD_31', 'FIELD_33', 'FIELD_38', 'FIELD_40',
+                                'L100500', 'L100700', 'L100800', 'L101200', 'L101300',
+                                'L101600', 'L101700', 'L103000', 'L103100', 'L103300',
+                                'L104600', 'L107400', 'L190000', 'L190300', 'L190400',
+                                'S000100', 'S000300', 'S000501', 'S000502', 'SEX', 'CLASS']
+
+    tempdata = tempdata[diabetes_requiredColumns]
+    tempdata = tempdata.dropna()
+
+    randomstate=42
+    sizeofdatapoints=10
+
+    diabetesTestData= pd.concat([tempdata[tempdata.CLASS == 0].sample(sizeofdatapoints, random_state=randomstate),
+                      tempdata[tempdata.CLASS == 1].sample(sizeofdatapoints, random_state=randomstate),
+                      tempdata[tempdata.CLASS == 2].sample(sizeofdatapoints, random_state=randomstate)], ignore_index=True).transpose().to_json()
+    return diabetesTestData
+
+diabetesTestData=prepareDiabetesTestData()
+
+def getDiabetesTestData():
+
+    return diabetesTestData
+
 def getAllPatientData():
     return data.to_json(orient='index')
 
@@ -95,3 +150,45 @@ def gethistplotData():
     }
 
     return RESULT
+
+
+# def getDiabetesTestData():
+
+#     return 0
+
+    # conditions = [(data.L100800 < 100),(data.L100800 >= 100) & (
+    #     data.L100800 < 126),        (data.L100800 >= 126)]
+
+    # choices = [0, 1, 2]
+
+    # data['CLASS'] = np.select(conditions, choices, default=0)
+
+    # # filter the data set
+    # # exclude people who are diagnosed for (diabetes)
+    # data = data[data.FIELD_16 != 1]
+    # # exclude people who are on medication for diabetes
+    # data = data[data.FIELD_23 != 1]
+
+    # # exclude people who are diagnosed for (high blood pressure)
+    # data = data[data.FIELD_15 != 1]
+    # # exclude people who are on medication for high blood pressure
+    # data = data[data.FIELD_22 != 1]
+
+    # # exclude people who are diagnosed for hyperlipidemia
+    # data = data[data.FIELD_17 != 1]
+    # # exclude people who are on medication for hyperlipidemia
+    # data = data[data.FIELD_24 != 1]
+    # print(data.shape)
+
+    # diabetes_requiredColumns = ['AGE', 'FIELD_31', 'FIELD_33', 'FIELD_38', 'FIELD_40',
+    #                             'L100500', 'L100700', 'L100800', 'L101200', 'L101300',
+    #                             'L101600', 'L101700', 'L103000', 'L103100', 'L103300',
+    #                             'L104600', 'L107400', 'L190000', 'L190300', 'L190400',
+    #                             'S000100', 'S000300', 'S000501', 'S000502', 'SEX', 'CLASS']
+
+    # data = data[diabetes_requiredColumns]
+    # data=data.dropna()
+
+    # return pd.concat([data[data.CLASS == 0].sample(5, random_state=42),
+    #                   data[data.CLASS == 1].sample(5, random_state=42),
+    #                   data[data.CLASS == 2].sample(5, random_state=42)], ignore_index=True).transpose().to_json()
