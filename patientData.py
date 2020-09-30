@@ -7,11 +7,12 @@ data = pd.read_csv('sep19SexAndAgeAddedFINAL DATASET_ver2.txt').drop(
     columns=['Unnamed: 0'])
 
 
+# prepare the data for diabetes ui test
+diabetesTestData = ""
+hyperlipidemiaTestData=""
 
-# prepare the data for diabetes ui test 
-diabetesTestData=""
 
-def prepareDiabetesTestData ():
+def prepareDiabetesTestData():
 
     tempdata = data
 
@@ -48,19 +49,73 @@ def prepareDiabetesTestData ():
     tempdata = tempdata[diabetes_requiredColumns]
     tempdata = tempdata.dropna()
 
-    randomstate=42
-    sizeofdatapoints=10
+    randomstate = 5
+    sizeofdatapoints = 10
 
-    diabetesTestData= pd.concat([tempdata[tempdata.CLASS == 0].sample(sizeofdatapoints, random_state=randomstate),
-                      tempdata[tempdata.CLASS == 1].sample(sizeofdatapoints, random_state=randomstate),
-                      tempdata[tempdata.CLASS == 2].sample(sizeofdatapoints, random_state=randomstate)], ignore_index=True).transpose().to_json()
+    diabetesTestData = pd.concat([tempdata[tempdata.CLASS == 0].sample(sizeofdatapoints, random_state=randomstate),
+                                  tempdata[tempdata.CLASS == 1].sample(
+                                      sizeofdatapoints, random_state=randomstate),
+                                  tempdata[tempdata.CLASS == 2].sample(sizeofdatapoints, random_state=randomstate)], ignore_index=True).transpose().to_json()
     return diabetesTestData
 
-diabetesTestData=prepareDiabetesTestData()
+
+def prepareHyperlipidemiaTestData():
+
+    tempdata = data
+
+    _class = []
+    for i in range(data.shape[0]):
+        if((tempdata.L102900[i] <= 200) & (tempdata.L103200[i] <= 130) & (tempdata.L103000[i] <= 150)):
+            _class.append(0)
+        else:
+            _class.append(1)
+    tempdata["CLASS"] = _class
+
+    # filter the data set
+    # exclude people who are diagnosed for (diabetes)
+    tempdata = tempdata[tempdata.FIELD_16 != 1]
+    # exclude people who are on medication for diabetes
+    tempdata = tempdata[tempdata.FIELD_23 != 1]
+
+    # exclude people who are diagnosed for (high blood pressure)
+    tempdata = tempdata[tempdata.FIELD_15 != 1]
+    # exclude people who are on medication for high blood pressure
+    tempdata = tempdata[tempdata.FIELD_22 != 1]
+
+    # exclude people who are diagnosed for hyperlipidemia
+    tempdata = tempdata[tempdata.FIELD_17 != 1]
+    # exclude people who are on medication for hyperlipidemia
+    tempdata = tempdata[tempdata.FIELD_24 != 1]
+    print(tempdata.shape)
+
+    diabetes_requiredColumns = ['AGE', 'FIELD_38', 'L100500', 'L100700', 'L100800', 'L101200', 'L101300',
+                                'L101700', 'L102900', 'L103000', 'L103100', 'L103200', 'L103300',
+                                'L104500', 'L104600', 'L190300', 'L190400',
+                                'L190500', 'L190800', 'S000100', 'S000300', 'S000501', 'S000502', 'SEX', 'CLASS']
+
+    tempdata = tempdata[diabetes_requiredColumns]
+    tempdata = tempdata.dropna()
+
+    randomstate = 45
+    sizeofdatapoints = 15
+
+    hyperlipidemiaTestData = pd.concat([tempdata[tempdata.CLASS == 0].sample(sizeofdatapoints, random_state=randomstate),
+                                  tempdata[tempdata.CLASS == 1].sample(
+                                      sizeofdatapoints, random_state=randomstate)
+                                  ], ignore_index=True).transpose().to_json()
+    return hyperlipidemiaTestData
+
+
+diabetesTestData = prepareDiabetesTestData()
+hyperlipidemiaTestData=prepareHyperlipidemiaTestData()
+
 
 def getDiabetesTestData():
-
     return diabetesTestData
+
+def getHyperlipidemiaTestData():
+    return hyperlipidemiaTestData
+
 
 def getAllPatientData():
     return data.to_json(orient='index')
