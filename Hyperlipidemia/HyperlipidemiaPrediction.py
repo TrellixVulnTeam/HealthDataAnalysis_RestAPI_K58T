@@ -197,16 +197,18 @@ def predictHyperlipidemiaNextYearValue(data):
 
         # load the classifer model and the feature scaller
         with open(
-                'Hyperlipidemia/M_Ny/HCMForNextYear_rf_model',
+                'Hyperlipidemia/M_Ny/HCMForNextYear_rf_model_sep28',
                 'rb') as f:
             _nextyearData_RF_Clf = pickle.load(f)
 
-        with open(
-                'Hyperlipidemia/M_Ny/HCMForNextYear_scaler_SMOTE',
-                'rb') as f:
-            _nextyearData_scaler = pickle.load(f)
 
-        scaledData = _nextyearData_scaler.transform(predictedNextYearValues)
+        # with open(
+        #         'Hyperlipidemia/M_Ny/HCMForNextYear_scaler_SMOTE',
+        #         'rb') as f:
+        #     _nextyearData_scaler = pickle.load(f)
+
+        # scaledData = _nextyearData_scaler.transform(predictedNextYearValues)
+        scaledData=predictedNextYearValues
 
         # compute class probability
         classprobapred = pd.DataFrame(
@@ -254,16 +256,17 @@ def predictNextYearHyperlipidemiaClass(data):
 
         # load the classifer model and the feature scaller
         with open(
-                'Hyperlipidemia/M_Ny/HCMForNextYear_rf_model',
+                'Hyperlipidemia/M_Ny/HCMForNextYear_rf_model_sep28',
                 'rb') as f:
             _nextyearData_RF_Clf = pickle.load(f)
 
-        with open(
-                'Hyperlipidemia/M_Ny/HCMForNextYear_scaler_SMOTE',
-                'rb') as f:
-            _nextyearData_scaler = pickle.load(f)
+        # with open(
+        #         'Hyperlipidemia/M_Ny/HCMForNextYear_scaler_SMOTE',
+        #         'rb') as f:
+        #     _nextyearData_scaler = pickle.load(f)
 
-        scaledData = _nextyearData_scaler.transform(data)
+        # scaledData = _nextyearData_scaler.transform(data)
+        scaledData = data
 
         # compute class probability
         classprobapred = pd.DataFrame(
