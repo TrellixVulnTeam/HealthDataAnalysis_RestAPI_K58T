@@ -40,6 +40,11 @@ def gethistplotData():
                                           'PUT', 'DELETE'])
 def getHyperlipidemiaTestData():
     return patientData.getHyperlipidemiaTestData()
+    
+@app.route('/getIschemiaTestData', methods=['GET', 'POST', 'PATCH',
+                                          'PUT', 'DELETE'])
+def getIschemiaTestData():
+    return patientData.getIschemiaTestData()
 
     
 

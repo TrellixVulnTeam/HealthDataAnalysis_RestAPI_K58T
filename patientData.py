@@ -6,10 +6,12 @@ import json
 data = pd.read_csv('sep19SexAndAgeAddedFINAL DATASET_ver2.txt').drop(
     columns=['Unnamed: 0'])
 
+ischemiadata = pd.read_csv('DATASET_2019-10-24_light.txt')
 
 # prepare the data for diabetes ui test
 diabetesTestData = ""
-hyperlipidemiaTestData=""
+hyperlipidemiaTestData = ""
+ischemiaTestData = ""
 
 
 def prepareDiabetesTestData():
@@ -100,21 +102,50 @@ def prepareHyperlipidemiaTestData():
     sizeofdatapoints = 15
 
     hyperlipidemiaTestData = pd.concat([tempdata[tempdata.CLASS == 0].sample(sizeofdatapoints, random_state=randomstate),
-                                  tempdata[tempdata.CLASS == 1].sample(
-                                      sizeofdatapoints, random_state=randomstate)
-                                  ], ignore_index=True).transpose().to_json()
+                                        tempdata[tempdata.CLASS == 1].sample(
+        sizeofdatapoints, random_state=randomstate)
+    ], ignore_index=True).transpose().to_json()
     return hyperlipidemiaTestData
 
 
+def prepareIschemiaTestData():
+
+    tempdata = ischemiadata
+
+    diabetes_requiredColumns = ['AGE', 'FIELD_15', 'FIELD_33', 'FIELD_38', 'FIELD_4', 'L100200',
+                                'L100500', 'L100700', 'L100800', 'L101200', 'L101300', 'L101600',
+                                'L101700', 'L102900', 'L103000', 'L103100', 'L103200', 'L103300',
+                                'L104300', 'L104400', 'L104500', 'L190000', 'L190300', 'L190400',
+                                'L190500', 'L190600', 'L190700', 'L190800', 'L190900', 'L504700',
+                                'S000100', 'S000300', 'S000501', 'S000502', 'SEX','CLASS']
+
+    tempdata = tempdata[diabetes_requiredColumns]
+    tempdata = tempdata.dropna()
+
+    randomstate = 45
+    sizeofdatapoints = 15
+
+    return pd.concat([tempdata[tempdata.CLASS == 0].sample(sizeofdatapoints, random_state=randomstate),
+                      tempdata[tempdata.CLASS == 1].sample(
+        sizeofdatapoints, random_state=randomstate)
+    ], ignore_index=True).transpose().to_json()
+
+
 diabetesTestData = prepareDiabetesTestData()
-hyperlipidemiaTestData=prepareHyperlipidemiaTestData()
+hyperlipidemiaTestData = prepareHyperlipidemiaTestData()
+ischemiaTestData=prepareIschemiaTestData()
 
 
 def getDiabetesTestData():
     return diabetesTestData
 
+
 def getHyperlipidemiaTestData():
     return hyperlipidemiaTestData
+
+
+def getIschemiaTestData():
+    return ischemiaTestData
 
 
 def getAllPatientData():
