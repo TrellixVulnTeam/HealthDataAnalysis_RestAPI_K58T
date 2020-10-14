@@ -11,7 +11,7 @@ import json
 
 
 def predictDiabeticClass(data):
-    
+
     try:
 
         # extract features from the payload data
@@ -23,13 +23,15 @@ def predictDiabeticClass(data):
         # load the classifer model and the feature scaller
         with open('Diabetic/M_Ny/DiabeticClassifierModel', 'rb') as f:
             _nextyearData_RF_Clf = pickle.load(f)
-        
+
         # rename the columns to match the orginal model features name
         data.columns = [
-            'fasting glucose','HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
-            'Uric Acid', 'Smoking', 'Drinking',
-            'physical_activity', 'Family_history'
+            'fasting glucose', 'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma',
+            'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history', 'SEX', 'AGE'
         ]
+        # rearange columns to fit the model columns
+        data = data[['fasting glucose', 'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
+                    'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history']]
 
         # compute class probability
         classprobapred = pd.DataFrame(
@@ -55,7 +57,8 @@ def predictDiabeticClass(data):
                 'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700',
                 'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
             ]))
-            
+
+
 def predictNextYearDiabeticClassDirect(data):
     # required columns
     #    cols=['L104600','L103000','S000300','L101700','SEX','AGE',
@@ -281,11 +284,12 @@ def predictDiabeticNextYearValue(data):
         # scaledData = _nextyearData_scaler.transform(predictedNextYearValues)
         scaledData = predictedNextYearValues
         scaledData.columns = [
-            'fasting glucose','HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
-            'Uric Acid', 'Smoking', 'Drinking',
-            'physical_activity', 'Family_history'
+            'fasting glucose', 'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma',
+            'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history', 'SEX', 'AGE'
         ]
-
+        # rearange columns to fit the model columns
+        scaledData = scaledData[['fasting glucose', 'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
+                    'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history']]
 
         # compute class probability
         classprobapred = pd.DataFrame(
