@@ -11,33 +11,35 @@ import json
 
 
 def predictDiabeticClass(data):
+    
     try:
-        # required columns
-        cols = [
-            'L104600', 'L103000', 'S000300', 'L101700', 'SEX', 'AGE',
-            'L100700', 'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31'
-        ]
 
-        with open('Diabetic/DiabeticClassifierModel', 'rb') as f:
-            rf = pickle.load(f)
+        # extract features from the payload data
+        data = data[[
+            'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
+            'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
+        ]]
 
-        data = data[cols]  # extract features from the payload data
-
+        # load the classifer model and the feature scaller
+        with open('Diabetic/M_Ny/DiabeticClassifierModel', 'rb') as f:
+            _nextyearData_RF_Clf = pickle.load(f)
+        
         # rename the columns to match the orginal model features name
         data.columns = [
-            'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
-            'Uric Acid', '_4_1_Smoking', 'Drinking_5_1_days',
-            '_6_1_of_physical_activity_high_strength', 'Family_history'
+            'fasting glucose','HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
+            'Uric Acid', 'Smoking', 'Drinking',
+            'physical_activity', 'Family_history'
         ]
 
         # compute class probability
         classprobapred = pd.DataFrame(
-            rf.predict_proba(data),
+            _nextyearData_RF_Clf.predict_proba(data),
             columns=['CLASS 0', 'CLASS 1', 'CLASS 2']).to_json(orient='index')
 
         # compute class value
         classpred = pd.DataFrame(
-            rf.predict(data), columns=['CLASS']).to_json(orient='index')
+            _nextyearData_RF_Clf.predict(data),
+            columns=['CLASS']).to_json(orient='index')
 
         RESULT = {
             "Class value": json.loads(classpred),
@@ -45,11 +47,15 @@ def predictDiabeticClass(data):
         }
 
         return RESULT  # (data.to_json(orient='index'))
+
     except Exception as e:
-        return (
-            (str(e)) + ' Required Fields: ' + ', '.join(str(x) for x in cols))
-
-
+        return ((str(e)) + ' Required Fields: ' + ', '.join(
+            str(x)
+            for x in [
+                'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700',
+                'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
+            ]))
+            
 def predictNextYearDiabeticClassDirect(data):
     # required columns
     #    cols=['L104600','L103000','S000300','L101700','SEX','AGE',
@@ -266,7 +272,7 @@ def predictDiabeticNextYearValue(data):
         # with open('Diabetic/M_Ny/DCMForNextYear_rf_model_SMOTE', 'rb') as f:
         #     _nextyearData_RF_Clf = pickle.load(f)
 
-        with open('Diabetic/M_Ny/NextYearDirectPredictUsingThisYearData_sep28', 'rb') as f:
+        with open('Diabetic/M_Ny/DiabeticClassifierModel', 'rb') as f:
             _nextyearData_RF_Clf = pickle.load(f)
 
         # with open('Diabetic/M_Ny/DCMForNextYear_scaler_SMOTE', 'rb') as f:
@@ -274,6 +280,12 @@ def predictDiabeticNextYearValue(data):
 
         # scaledData = _nextyearData_scaler.transform(predictedNextYearValues)
         scaledData = predictedNextYearValues
+        scaledData.columns = [
+            'fasting glucose','HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
+            'Uric Acid', 'Smoking', 'Drinking',
+            'physical_activity', 'Family_history'
+        ]
+
 
         # compute class probability
         classprobapred = pd.DataFrame(
