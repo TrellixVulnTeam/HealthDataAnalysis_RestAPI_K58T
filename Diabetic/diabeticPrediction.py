@@ -155,175 +155,6 @@ def predictNextYearDiabeticClass(data):
             ]))
 
 
-# def predictDiabeticNextYearValue(data):
-#     # in this section we predict the next year value of each features.
-#     # to predict next year values this year value and the features
-#     # used to predict next year value should not be null
-#     try:
-
-#         # required columns to predict class status of the patient
-#         cols = [
-#             'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'SEX',
-#             'AGE', 'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31'
-#         ]
-
-#         #    features required to generate next year L104600 value
-#         cols_L100800 = [
-#             'L100800', 'S000300', 'L103000', 'L104600', 'AGE', 'L100700',
-#             'L103100', 'L101700', 'L103300', 'L190500', 'L190400', 'L101300'
-#         ]
-
-#         #    features required to generate next year L104600 value
-#         cols_L104600 = [
-#             "L104600", "L100800", "S000300", "AGE", "L101300", "S000501",
-#             "L101700", "S000502", "L190000", "L101600", "L190300"
-#         ]
-
-#         #    features required to generate next year L103000 value
-#         cols_L103000 = [
-#             "L103000", "L100700", "L101700", "S000300", "S000502", "FIELD_33",
-#             "L190000", "L100800", "L101600", "S000501"
-#         ]
-
-#         #    features required to generate next year S000300 value
-#         cols_S000300 = [
-#             "S000300", "L103300", "S000501", "L100700", "SEX", "L103100",
-#             "L190300", "L190400", "L101300", "S000502"
-#         ]
-
-#         #    features required to generate next year L101700 value
-#         cols_L101700 = [
-#             "L101700", "L101300", "L103000", "SEX", "L100700", "L101200",
-#             "S000300", "S000501", "L100800", "S000502", "L101600", "S000100"
-#         ]
-
-#         #    features required to generate next year L100700 value
-#         cols_L100700 = [
-#             "L100700",
-#             "L100500",
-#             "S000100",
-#             "S000300",
-#             "L103300",
-#             "L103000",
-#             "L103100",
-#             "S000501",
-#             "L101300",
-#             "L101700",
-#             "S000502",
-#             "L107400",
-#         ]
-
-#         # Load the trained regression models for the next year
-#         with open('Diabetic/M_Ny/DiabeticModel_nextyear_L100800_RF_regressor',
-#                   'rb') as f:
-#             reg_L100800 = pickle.load(f)
-
-#         with open('Diabetic/M_Ny/DiabeticModel_nextyear_L104600_RF_regressor',
-#                   'rb') as f:
-#             reg_L104600 = pickle.load(f)
-
-#         with open('Diabetic/M_Ny/DiabeticModel_nextyear_L103000_RF_regressor',
-#                   'rb') as f:
-#             reg_L103000 = pickle.load(f)
-
-#         with open('Diabetic/M_Ny/DiabeticModel_nextyear_S000300_RF_regressor',
-#                   'rb') as f:
-#             reg_S000300 = pickle.load(f)
-
-#         with open('Diabetic/M_Ny/DiabeticModel_nextyear_L101700_RF_regressor',
-#                   'rb') as f:
-#             reg_L101700 = pickle.load(f)
-
-#         with open('Diabetic/M_Ny/DiabeticModel_nextyear_L100700_RF_regressor',
-#                   'rb') as f:
-#             reg_L100700 = pickle.load(f)
-
-#         # predicte next year value
-#         N_y_L100800 = np.array(reg_L100800.predict(data[cols_L100800]))
-#         N_y_L104600 = np.array(reg_L104600.predict(data[cols_L104600]))
-#         N_y_L103000 = list(reg_L103000.predict(data[cols_L103000]))
-#         N_y_S000300 = list(reg_S000300.predict(data[cols_S000300]))
-#         N_y_L101700 = list(reg_L101700.predict(data[cols_L101700]))
-#         N_y_L100700 = list(reg_L100700.predict(data[cols_L100700]))
-#         N_y_SEX = list(data['SEX'])
-#         N_y_AGE = list((data['AGE'].astype('int')) + 1)
-#         N_y_FIELD_33 = list(data['FIELD_33'])
-#         N_y_FIELD_38 = list(data['FIELD_38'])
-#         N_y_FIELD_40 = list(data['FIELD_40'])
-#         N_y_FIELD_31 = list(data['FIELD_31'])
-
-#         predictedNextYearValues = pd.DataFrame()
-#         predictedNextYearValues['L100800'] = N_y_L100800
-#         predictedNextYearValues['L104600'] = N_y_L104600
-#         predictedNextYearValues['L103000'] = N_y_L103000
-#         predictedNextYearValues['S000300'] = N_y_S000300
-#         predictedNextYearValues['L101700'] = N_y_L101700
-#         predictedNextYearValues['L100700'] = N_y_L100700
-#         predictedNextYearValues['SEX'] = N_y_SEX
-#         predictedNextYearValues['AGE'] = N_y_AGE
-#         predictedNextYearValues['FIELD_33'] = N_y_FIELD_33
-#         predictedNextYearValues['FIELD_38'] = N_y_FIELD_38
-#         predictedNextYearValues['FIELD_40'] = N_y_FIELD_40
-#         predictedNextYearValues['FIELD_31'] = N_y_FIELD_31
-
-#         predictedNextYearValues = predictedNextYearValues[[
-#             'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700',
-#             'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
-#         ]]
-
-#         # load the classifer model and the feature scaller
-#         # with open('Diabetic/M_Ny/DCMForNextYear_rf_model_SMOTE', 'rb') as f:
-#         #     _nextyearData_RF_Clf = pickle.load(f)
-
-#         with open('Diabetic/M_Ny/DiabeticClassifierModel', 'rb') as f:
-#             _nextyearData_RF_Clf = pickle.load(f)
-
-#         # with open('Diabetic/M_Ny/DCMForNextYear_scaler_SMOTE', 'rb') as f:
-#         #     _nextyearData_scaler = pickle.load(f)
-
-#         # scaledData = _nextyearData_scaler.transform(predictedNextYearValues)
-#         scaledData = predictedNextYearValues
-#         scaledData.columns = [
-#             'fasting glucose', 'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma',
-#             'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history', 'SEX', 'AGE'
-#         ]
-#         # rearange columns to fit the model columns
-#         scaledData = scaledData[['fasting glucose', 'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
-#                                  'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history']]
-
-#         # compute class probability
-#         classprobapred = pd.DataFrame(
-#             _nextyearData_RF_Clf.predict_proba(scaledData),
-#             columns=['CLASS 0', 'CLASS 1', 'CLASS 2']).to_json(orient='index')
-
-#         # compute class value
-#         classpred = pd.DataFrame(
-#             _nextyearData_RF_Clf.predict(scaledData),
-#             columns=['CLASS']).to_json(orient='index')
-
-#         RESULT = {
-#             "Next Year Value":
-#             json.loads(predictedNextYearValues.to_json(orient='index')),
-#             "Class value":
-#             json.loads(classpred),
-#             "Class probability":
-#             json.loads(classprobapred)
-#         }
-
-#         return RESULT
-
-#     except Exception as e:
-#         return ((str(e)) + ' Required Fields: ' + ', '.join(
-#             str(x)
-#             for x in [
-#                 'AGE', 'FIELD_31', 'FIELD_33', 'FIELD_38', 'FIELD_40',
-#                 'L100500', 'L100700', 'L100800', 'L101200', 'L101300',
-#                 'L101600', 'L101700', 'L103000', 'L103100', 'L103300',
-#                 'L104600', 'L107400', 'L190000', 'L190300', 'L190400',
-#                 'S000100', 'S000300', 'S000501', 'S000502', 'SEX'
-#             ]))
-
-
 def predictDiabeticNextYearValue(data):
     # in this section we predict the next year value of each features.
     # to predict next year values this year value and the features
@@ -454,11 +285,6 @@ def predictDiabeticNextYearValue(data):
             'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history', 'SEX', 'AGE'
         ]
 
-        
-        print("*********************//////////////////////////////*********")
-        print(temppredictedvalue)
-        print(tempthisyeardata)
-        print(testdata)
 
         # load the classifer model and the feature scaller
         # with open('Diabetic/M_Ny/DCMForNextYear_rf_model_SMOTE', 'rb') as f:
@@ -523,24 +349,6 @@ def predictDiabeticClassForAdustedValues(data, thisyearvalue):
 
     try:
 
-        # # extract features from the payload data
-        # data = data[[
-        #     'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
-        #     'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
-        # ]]
-        # # # rename the columns to match the orginal model features name
-        # # data.columns = ['L100800_x', 'L104600_x', 'L103000_x', 'S000300_x', 'L101700_x',
-        # #                 'L100700_x', 'FIELD_33_x', 'FIELD_38_x', 'FIELD_40_x', 'FIELD_31_x',
-        # #                 'SEX_x', 'AGE_x', ]
-
-        # thisyearvalue = thisyearvalue[[
-        #     'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
-        #     'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
-        # ]]
-        # # rename the columns to match the orginal model features name
-        # thisyearvalue.columns = ['L100800_y', 'L104600_y', 'L103000_y', 'S000300_y', 'L101700_y', 'L100700_y',
-        #                          'FIELD_33_y', 'FIELD_38_y', 'FIELD_40_y', 'FIELD_31_y', 'SEX_y', 'AGE_y']
-
         # extract features from the payload data
         data = data[[
             'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
@@ -556,9 +364,6 @@ def predictDiabeticClassForAdustedValues(data, thisyearvalue):
 
         # merge this year and the predicted values
         data = pd.concat([data, thisyearvalue], axis=1)
-
-        print("****************-----------------------------/////////")
-        print(data)
 
         # load the classifer model
         with open('Diabetic/M_Ny/_DiabeticClassifierModelForNextYear_rf_model_mf2', 'rb') as f:
@@ -589,80 +394,3 @@ def predictDiabeticClassForAdustedValues(data, thisyearvalue):
                 'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
             ]))
 
-
-# def predictDiabeticClassForAdustedValues(data, thisyearvalue):
-
-#     # data=pd.DataFrame(pd.DataFrame(data.iloc[0,:]).iloc[0,:]).iloc[0,:]
-
-#     # print(type(data),data)
-
-#     try:
-
-#         # extract features from the payload data
-#         data = data[[
-#             'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
-#             'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
-#         ]]
-
-#         # load the classifer model and the feature scaller
-#         with open('Diabetic/M_Ny/DiabeticClassifierModel', 'rb') as f:
-#             _nextyearData_RF_Clf = pickle.load(f)
-
-#         with open('Diabetic/M_Ny/NextYearDirectPredictUsingThisYearData_sep28', 'rb') as f:
-#             _nextyearData_RF_Clf_direct = pickle.load(f)
-
-#         # rename the columns to match the orginal model features name
-#         data.columns = [
-#             'fasting glucose', 'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma',
-#             'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history', 'SEX', 'AGE'
-#         ]
-#         # rearange columns to fit the model columns
-#         data = data[['fasting glucose', 'HBA1C', 'Triglycerides', 'BMI', 'r-GTP gamma', 'SEX', 'AGE',
-#                      'Uric Acid', 'Smoking', 'Drinking', 'physical_activity', 'Family_history']]
-
-#         # compute class probability
-#         # classprobapred = pd.DataFrame(
-#         #     _nextyearData_RF_Clf.predict_proba(data),
-#         #     columns=['CLASS 0', 'CLASS 1', 'CLASS 2']).to_json(orient='index')
-
-#         classprobapred = _nextyearData_RF_Clf.predict_proba(data)
-
-#         classprobapred_direct = _nextyearData_RF_Clf_direct.predict_proba(thisyearvalue[[
-#             'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700', 'FIELD_33',
-#             'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
-#         ]])
-
-#         print("/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*")
-
-#         print(classprobapred, classprobapred_direct, type(classprobapred))
-
-#         classprobapred = 0.55*classprobapred+ 0.45*classprobapred_direct
-
-#         pred_index = np.argmax(classprobapred)
-
-#         print(classprobapred, pred_index)
-
-#         classprobapred = pd.DataFrame(
-#             classprobapred,
-#             columns=['CLASS 0', 'CLASS 1', 'CLASS 2']).to_json(orient='index')
-
-#         # compute class value
-#         classpred = pd.DataFrame(
-#             # _nextyearData_RF_Clf.predict(data),
-#             [pred_index],
-#             columns=['CLASS']).to_json(orient='index')
-
-#         RESULT = {
-#             "Class value": json.loads(classpred),
-#             "Class probability": json.loads(classprobapred)
-#         }
-
-#         return RESULT  # (data.to_json(orient='index'))
-
-#     except Exception as e:
-#         return ((str(e)) + ' Required Fields: ' + ', '.join(
-#             str(x)
-#             for x in [
-#                 'L100800', 'L104600', 'L103000', 'S000300', 'L101700', 'L100700',
-#                 'FIELD_33', 'FIELD_38', 'FIELD_40', 'FIELD_31', 'SEX', 'AGE'
-#             ]))
