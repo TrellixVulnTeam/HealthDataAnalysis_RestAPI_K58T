@@ -128,6 +128,21 @@ def predictNextYearDiabeticClassDirect():
     else:
         return 'No dataset available'
 
+        
+@app.route('/predictDiabeticClassForAdustedValues',
+           methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predictDiabeticClassForAdustedValues():
+    content = request.get_json()
+    if (content != None):
+        import pandas as pd
+                
+        return dp.predictDiabeticClassForAdustedValues(pd.DataFrame.from_dict(content["0"], orient='index'),
+        pd.DataFrame.from_dict(content["1"], orient='index'))
+    else:
+        return 'No dataset available'
+
+
+
 
 # ======== Hyperlipidemia info API============
 #   ================================

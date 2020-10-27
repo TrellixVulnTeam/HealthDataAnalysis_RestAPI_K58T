@@ -3,10 +3,9 @@ import numpy as np
 import json
 
 # read the dataset and convert it to json
-data = pd.read_csv('sep19SexAndAgeAddedFINAL DATASET_ver2.txt').drop(
-    columns=['Unnamed: 0'])
-
-ischemiadata = pd.read_csv('DATASET_2019-10-24_light.txt')
+# data = pd.read_csv('sep19SexAndAgeAddedFINAL DATASET_ver2.txt').drop(
+#     columns=['Unnamed: 0'])
+data = ischemiadata = pd.read_csv('DATASET_2019-10-24_light.txt')
 
 # prepare the data for diabetes ui test
 diabetesTestData = ""
@@ -51,7 +50,7 @@ def prepareDiabetesTestData():
     tempdata = tempdata[diabetes_requiredColumns]
     tempdata = tempdata.dropna()
 
-    randomstate = 5
+    randomstate = 15
     sizeofdatapoints = 10
 
     diabetesTestData = pd.concat([tempdata[tempdata.CLASS == 0].sample(sizeofdatapoints, random_state=randomstate),
@@ -98,7 +97,7 @@ def prepareHyperlipidemiaTestData():
     tempdata = tempdata[diabetes_requiredColumns]
     tempdata = tempdata.dropna()
 
-    randomstate = 45
+    randomstate = 15
     sizeofdatapoints = 15
 
     hyperlipidemiaTestData = pd.concat([tempdata[tempdata.CLASS == 0].sample(sizeofdatapoints, random_state=randomstate),
@@ -117,7 +116,7 @@ def prepareIschemiaTestData():
                                 'L101700', 'L102900', 'L103000', 'L103100', 'L103200', 'L103300',
                                 'L104300', 'L104400', 'L104500', 'L190000', 'L190300', 'L190400',
                                 'L190500', 'L190600', 'L190700', 'L190800', 'L190900', 'L504700',
-                                'S000100', 'S000300', 'S000501', 'S000502', 'SEX','CLASS']
+                                'S000100', 'S000300', 'S000501', 'S000502', 'SEX', 'CLASS']
 
     tempdata = tempdata[diabetes_requiredColumns]
     tempdata = tempdata.dropna()
@@ -133,7 +132,7 @@ def prepareIschemiaTestData():
 
 diabetesTestData = prepareDiabetesTestData()
 hyperlipidemiaTestData = prepareHyperlipidemiaTestData()
-ischemiaTestData=prepareIschemiaTestData()
+ischemiaTestData = prepareIschemiaTestData()
 
 
 def getDiabetesTestData():
