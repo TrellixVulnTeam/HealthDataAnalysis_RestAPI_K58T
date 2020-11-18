@@ -229,6 +229,20 @@ def predictIschemiaNextYearClass():
         return 'No dataset available'
 
 
+
+@app.route('/predictIschemiaNextYearClass_Direct',
+           methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
+def predictIschemiaNextYearClass_Direct():
+    content = request.get_json()
+    if (content != None):
+        import pandas as pd
+        df = pd.DataFrame.from_dict(content, orient='index')
+        # RF_iris_load.predictRf(np.asarray(df))
+        return ip.predictIschemiaNextYearClass_Direct(df)
+    else:
+        return 'No dataset available'
+
+
 # =============app start=====================
 if __name__ == '__main__':
     app.run(debug=True)

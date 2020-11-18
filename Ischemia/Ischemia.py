@@ -247,3 +247,41 @@ def predictIschemiaNextYearClass(data):
     except Exception as e:
         return (
             (str(e)) + ' Required Fields: ' + ', '.join(str(x) for x in cols))
+
+
+def predictIschemiaNextYearClass_Direct(data):
+    try:
+
+        # required columns to predict class status of the patient
+        cols = [
+            'L100700','S000300','L101700','L103300','L103100','L504700','L190300',           
+           'SEX','FIELD_15','FIELD_33','FIELD_38','L190900', 'AGE'
+        ]
+
+        # extract features from the payload data
+        data = data[cols]
+
+        # load the classifer model and the feature scaller
+        with open('Ischemia/M_Ny/ISchemia_nextyear_Direct_classifier', 'rb') as f:
+            _nextyearData_RF_Clf = pickle.load(f)
+
+            # compute class probability
+        classprobapred = pd.DataFrame(
+            _nextyearData_RF_Clf.predict_proba(data),
+            columns=['CLASS 0', 'CLASS 1']).to_json(orient='index')
+
+        # compute class value
+        classpred = pd.DataFrame(
+            _nextyearData_RF_Clf.predict(data),
+            columns=['CLASS']).to_json(orient='index')
+
+        RESULT = {
+            "Class value": json.loads(classpred),
+            "Class probability": json.loads(classprobapred)
+        }
+
+        return RESULT  # (data.to_json(orient='index'))
+
+    except Exception as e:
+        return (
+            (str(e)) + ' Required Fields: ' + ', '.join(str(x) for x in cols))
